@@ -12,7 +12,7 @@ public class CharactorsManager : MonoBehaviour
     GameObject charactorObj;
 
     Animator animator;
-
+    bool jump;
     float vertical,horizontal;
     float basicSpeed = 2;
     float speedPower = 1;
@@ -73,10 +73,20 @@ public class CharactorsManager : MonoBehaviour
     {
         vertical=Input.GetAxis("Vertical");
         horizontal=Input.GetAxis("Horizontal");
+        jump = Input.GetButtonDown("Jump");
     }
 
     void UpdateState()
     {
+        if (jump)
+        {
+            if(isOnGround)
+            {
+                animator.CrossFade("jumpBegin",0.2f);
+                humanRigid.AddForce(0,300,0);
+            }
+        }
+
 
         // moveX = vertical * transform.forward;
         // moveY = horizontal * transform.right;
@@ -90,6 +100,8 @@ public class CharactorsManager : MonoBehaviour
         float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
         moveLimit = Mathf.Clamp01(m);
 
+        animator.SetFloat("speed",moveLimit,0.1f,Time.fixedDeltaTime);
+
     }
 
     void FixedMove()
@@ -99,12 +111,12 @@ public class CharactorsManager : MonoBehaviour
         {
             // Debug.Log(moveDir);
 
-            animator.SetBool("canMove",true);
+            // animator.SetBool("canMove",true);
             canMove=true;
         }
         else
         {
-            animator.SetBool("canMove",false);
+            // animator.SetBool("canMove",false);
             canMove=false;
         }
 
@@ -119,4 +131,21 @@ public class CharactorsManager : MonoBehaviour
         }
 
     }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.tag.Equals("Ground"))
+        {
+            isOnGround = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.tag.Equals("Ground"))
+        {
+            isOnGround = false;
+        }
+    }
+
 }
