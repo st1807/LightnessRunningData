@@ -519,6 +519,7 @@ GameObject:
   - component: {fileID: 875700060}
   - component: {fileID: 875700059}
   - component: {fileID: 875700058}
+  - component: {fileID: 875700061}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Ground
@@ -551,7 +552,7 @@ Terrain:
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
+  m_DetailObjectDistance: 52
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
@@ -584,6 +585,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &875700061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875700057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93da764cb7fbb6d479d0567ba4cf186a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dis: 100
 --- !u!1 &983863182
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,7 +738,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.406
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalPosition.y
@@ -740,7 +754,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.09099636
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalRotation.z
@@ -748,7 +762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9958512
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_RootOrder
@@ -760,7 +774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 10.442
       objectReference: {fileID: 0}
     - target: {fileID: 4589913164025196, guid: 3b7d506424e21d64492716b107a15138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -990,10 +1004,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1961789927}
-  - component: {fileID: 1961789928}
   - component: {fileID: 1961789930}
   - component: {fileID: 1961789931}
   - component: {fileID: 1961789929}
+  - component: {fileID: 1961789928}
   m_Layer: 0
   m_Name: Bow_charactor
   m_TagString: Untagged
@@ -1009,7 +1023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1961789926}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 506.23, y: 100.379, z: 478.79}
+  m_LocalPosition: {x: 506.23, y: 100.669, z: 478.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1027485952}
@@ -1058,8 +1072,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!135 &1961789931
-SphereCollider:
+--- !u!136 &1961789931
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1068,9 +1082,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0.2, z: 0}
+  m_Height: 1
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2052755461
 GameObject:
   m_ObjectHideFlags: 0

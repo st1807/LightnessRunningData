@@ -7,8 +7,9 @@ public class CharactorsManager : MonoBehaviour
     // Collider humanCollider;
     Camera controlCamera;
     Rigidbody humanRigid;
-    Vector3 moveX,moveY , moveDir;
+    // Vector3 moveX,moveY ;
 
+    Vector3 moveDir;
     GameObject charactorObj;
 
     Animator animator;
@@ -47,10 +48,10 @@ public class CharactorsManager : MonoBehaviour
         charactorObj=transform.Find("charactor").gameObject;
         animator=charactorObj.GetComponent<Animator>();
 
-        if (moveRotation==null)
-        {
-            moveRotation= Quaternion.LookRotation(myTrans.forward);
-        }
+        // if (moveRotation==null)
+        // {
+        //     moveRotation= Quaternion.LookRotation(myTrans.forward);
+        // }
 
         cameraController = CameraController.instance;
         cameraController.BindTarget(myTrans);
@@ -78,9 +79,10 @@ public class CharactorsManager : MonoBehaviour
 
     void UpdateState()
     {
+        canMove = animator.GetBool("canMove");
         if (jump)
         {
-            if(isOnGround)
+            if(isOnGround && canMove)
             {
                 animator.CrossFade("jumpBegin",0.2f);
                 humanRigid.AddForce(0,300,0);
@@ -90,8 +92,8 @@ public class CharactorsManager : MonoBehaviour
 
         // moveX = vertical * transform.forward;
         // moveY = horizontal * transform.right;
-        moveX = vertical * controlCamera.transform.forward;
-        moveY= horizontal * controlCamera.transform.right;
+        Vector3 moveX = vertical * controlCamera.transform.forward;
+        Vector3 moveY= horizontal * controlCamera.transform.right;
         float moveSpeed= basicSpeed * speedPower;
 
         moveDir = ((moveX + moveY).normalized) * moveSpeed * moveLimit;
@@ -106,28 +108,25 @@ public class CharactorsManager : MonoBehaviour
 
     void FixedMove()
     {
-
-        if (moveDir.x!=0 ||moveDir.z!=0)
+        if (isOnGround)
         {
-            // Debug.Log(moveDir);
-
-            // animator.SetBool("canMove",true);
-            canMove=true;
-        }
-        else
-        {
-            // animator.SetBool("canMove",false);
-            canMove=false;
+            if (canMove)
+            {
+                humanRigid.velocity=moveDir;// human move;
+            }
         }
 
-        // canMove=animator.GetBool("canMove");
         if (canMove)
         {
-            humanRigid.velocity=moveDir;// human move;
-
-            Quaternion targetQua= Quaternion.LookRotation(moveDir);
-            moveRotation = Quaternion.Slerp(myTrans.rotation,targetQua,Time.fixedDeltaTime * 5);
-            myTrans.rotation=moveRotation;
+                Vector3 targetDir = moveDir;
+                targetDir.y = 0;
+                if (targetDir==Vector3.zero)
+                {
+                    targetDir = transform.forward;
+                }
+                Quaternion targetQua= Quaternion.LookRotation(targetDir);
+                moveRotation = Quaternion.Slerp(myTrans.rotation,targetQua,Time.fixedDeltaTime * 5);
+                myTrans.rotation=moveRotation;
         }
 
     }
