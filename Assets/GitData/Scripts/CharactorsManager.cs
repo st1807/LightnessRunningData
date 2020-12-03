@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class CharactorsManager : MonoBehaviour
 {
+    Transform leftWeapon;
+    Transform rightWeapon;
+    GameObject charactorObj;
+
+    Transform myTrans;
+
     // Collider humanCollider;
     Camera controlCamera;
     Rigidbody humanRigid;
     // Vector3 moveX,moveY ;
 
     Vector3 moveDir;
-    GameObject charactorObj;
-
     Animator animator;
-    bool jump;
     float vertical,horizontal;
     float basicSpeed = 2;
     float speedPower = 1;
@@ -23,8 +26,9 @@ public class CharactorsManager : MonoBehaviour
     Quaternion moveRotation;
     bool canMove = false;
 
-    bool isJump;
+    bool jump;
 
+    bool fire01;
     bool isRoll;
 
     bool isOnGround=true;
@@ -32,8 +36,6 @@ public class CharactorsManager : MonoBehaviour
     bool isSpeedUp;
 
     bool isDizzy;
-
-    Transform myTrans;
 
     CameraController cameraController;
 
@@ -45,7 +47,11 @@ public class CharactorsManager : MonoBehaviour
 
         controlCamera=Camera.main;
 
-        charactorObj=transform.Find("charactor").gameObject;
+        charactorObj=myTrans.Find("charactor").gameObject;
+
+        rightWeapon = myTrans.Find("charactor/root/weaponShield_r");
+        leftWeapon = myTrans.Find("charactor/root/weaponShield_l");
+
         animator=charactorObj.GetComponent<Animator>();
 
         // if (moveRotation==null)
@@ -75,6 +81,7 @@ public class CharactorsManager : MonoBehaviour
         vertical=Input.GetAxis("Vertical");
         horizontal=Input.GetAxis("Horizontal");
         jump = Input.GetButtonDown("Jump");
+        fire01 = Input.GetButtonDown("Fire1");
     }
 
     void UpdateState()
@@ -88,7 +95,6 @@ public class CharactorsManager : MonoBehaviour
                 humanRigid.AddForce(0,300,0);
             }
         }
-
 
         // moveX = vertical * transform.forward;
         // moveY = horizontal * transform.right;
@@ -129,6 +135,57 @@ public class CharactorsManager : MonoBehaviour
                 myTrans.rotation=moveRotation;
         }
 
+        UpdateAnimate();
+
+    }
+
+    void UpdateAnimate()
+    {
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            Debug.Log("click ctrl"+fire01);
+        }
+        if (fire01)
+        {
+            Debug.Log("click fire"+fire01);
+        }
+        if (fire01&&canMove)
+        {
+            Debug.Log("crossfade fire");
+            if (isOnGround)
+            {
+                animator.CrossFade("Attack01",0.1f);
+            }
+            else
+            {
+                animator.CrossFade("JumpAttack01",0.1f);
+            }
+
+            fire01 = false;
+        }
+    }
+
+    // void AttackEvents()
+    // {
+    //     if (fire01)
+    //     {
+            
+    //     }
+    // }
+
+    IEnumerator ArcherShoot()
+    {
+        yield return new WaitForSeconds(0.6f);
+
+        GameObject obj = Instantiate(rightWeapon.gameObject,rightWeapon.parent);
+        obj.transform.position = rightWeapon.position;
+        obj.transform.rotation = rightWeapon.rotation;
+        obj.AddComponent<FlyThings>();
+        rightWeapon.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(1.2f);
+        
+        rightWeapon.gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider collision)
