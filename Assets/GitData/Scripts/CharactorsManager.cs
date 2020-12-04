@@ -39,6 +39,8 @@ public class CharactorsManager : MonoBehaviour
 
     CameraController cameraController;
 
+    string[] attackStrs = new string[]{"Attack01","Attack02"};
+
     void Start()
     {
         // humanCollider=GetComponent<Collider>();
@@ -75,6 +77,10 @@ public class CharactorsManager : MonoBehaviour
         UpdateData();
         UpdateState();
     }
+    void LateUpdate()
+    {
+        UpdateAnimate();
+    }
 
     void UpdateData()
     {
@@ -108,7 +114,6 @@ public class CharactorsManager : MonoBehaviour
         float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
         moveLimit = Mathf.Clamp01(m);
 
-        animator.SetFloat("speed",moveLimit,0.1f,Time.fixedDeltaTime);
 
     }
 
@@ -119,6 +124,7 @@ public class CharactorsManager : MonoBehaviour
             if (canMove)
             {
                 humanRigid.velocity=moveDir;// human move;
+                animator.SetFloat("speed",moveLimit,0.1f,Time.fixedDeltaTime);
             }
         }
 
@@ -135,26 +141,17 @@ public class CharactorsManager : MonoBehaviour
                 myTrans.rotation=moveRotation;
         }
 
-        UpdateAnimate();
-
     }
 
     void UpdateAnimate()
     {
-        if (Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            Debug.Log("click ctrl"+fire01);
-        }
-        if (fire01)
-        {
-            Debug.Log("click fire"+fire01);
-        }
+
         if (fire01&&canMove)
         {
-            Debug.Log("crossfade fire");
             if (isOnGround)
             {
-                animator.CrossFade("Attack01",0.1f);
+                int temp = Random.Range(0,2);
+                animator.CrossFade(attackStrs[temp],0.1f);
             }
             else
             {
@@ -164,14 +161,6 @@ public class CharactorsManager : MonoBehaviour
             fire01 = false;
         }
     }
-
-    // void AttackEvents()
-    // {
-    //     if (fire01)
-    //     {
-            
-    //     }
-    // }
 
     IEnumerator ArcherShoot()
     {
